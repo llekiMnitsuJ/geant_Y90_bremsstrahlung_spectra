@@ -34,6 +34,7 @@
 #include "G4NistManager.hh"
 
 #include "G4Box.hh"
+#include "G4Orb.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
@@ -109,7 +110,7 @@ void B4DetectorConstruction::DefineMaterials()
 G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
 {
   // Geometry parameters
-  G4double sphereRadius = 15.*mm;
+  G4double sphereRadius = 0.5*mm;
   G4double world_xyz = 1.2*sphereRadius;
   
   G4NistManager* nist = G4NistManager::Instance();
@@ -122,7 +123,7 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
   //
   G4VSolid* worldS 
     = new G4Box("World",           // its name
-                 world_xyz/2., world_xyz/2., world_xyz/2.); // its size
+                 world_xyz, world_xyz, world_xyz); // its size
                          
   G4LogicalVolume* worldLV
     = new G4LogicalVolume(

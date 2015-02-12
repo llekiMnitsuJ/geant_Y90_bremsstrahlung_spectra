@@ -66,17 +66,21 @@ void B4aSteppingAction::UserSteppingAction(const G4Step* step)
   G4StepPoint* prePoint = step->GetPreStepPoint();
   G4StepPoint* postPoint = step->GetPostStepPoint();
 
+//  G4cout << "in user stepping action!" << G4endl;
   //check if on surface of sphere...
   if ( (postPoint->GetStepStatus() == fGeomBoundary) &&
 	   (prePoint->GetPhysicalVolume()->GetName() == "sphere") &&
-	   (postPoint->GetPhysicalVolume()->GetName() == "world")){
+	   (postPoint->GetPhysicalVolume()->GetName() == "World")){
+
 
 	  //now check that it is a photon
 	  G4Track* myTrack = step->GetTrack();
-	  G4ParticleDefinition* myParticleDef = myTrack->GetParticleDefinition();
+	  const G4ParticleDefinition* myParticleDef = myTrack->GetParticleDefinition();
 	  const G4String particleName = myParticleDef->GetParticleName();
+//	  G4cout << "on surface of sphere with " << particleName << G4endl;
 	  if (particleName == "gamma"){
 		  G4double photonEnergy = postPoint->GetKineticEnergy();
+		  fEventAction->AddToEnergyVector(photonEnergy);
 	  }
 
 	  /*

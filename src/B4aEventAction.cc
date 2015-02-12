@@ -45,7 +45,6 @@
 B4aEventAction::B4aEventAction()
  : G4UserEventAction(),
    fMessenger(0),
-   fEnergyVec(0),
    fPrintModulo(1)
 {
   // Define /B4/event commands using generic messenger class
@@ -72,10 +71,11 @@ void B4aEventAction::BeginOfEventAction(const G4Event* evt)
 {  
 
   G4int eventID = evt->GetEventID();
-  if ( eventID % fPrintModulo == 0 )  { 
+
+//  if ( eventID % fPrintModulo == 0 )  {
     G4cout << "\n---> Begin of event: " << eventID << G4endl;
-    //CLHEP::HepRandom::showEngineStatus();
-  }
+//    //CLHEP::HepRandom::showEngineStatus();
+//  }
 
   // initialisation per event
   fEnergyVec.clear();
@@ -110,14 +110,14 @@ void B4aEventAction::EndOfEventAction(const G4Event* evt)
   // Print per event (modulo n)
   //
   G4int eventID = evt->GetEventID();
-  if ( eventID % fPrintModulo == 0) {
-    G4cout << "---> End of event: " << eventID << G4endl;     
-
-    G4cout
-       << "   Total number of photons logged at sphere surface: " << std::setw(7)
-                                        << fEnergyVec.size()
-       << G4endl;
-  }
+//  if ( eventID % fPrintModulo == 0) {
+    G4cout << "---> End of event: " << eventID << G4endl;
+//
+//    G4cout
+//       << "   Total number of photons logged at sphere surface: " << std::setw(7)
+//                                        << fEnergyVec.size()
+//       << G4endl;
+//  }
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

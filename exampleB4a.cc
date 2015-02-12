@@ -33,6 +33,7 @@
 #include "B4RunAction.hh"
 #include "B4aEventAction.hh"
 #include "B4aSteppingAction.hh"
+#include "PhysicsList.hh"
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"

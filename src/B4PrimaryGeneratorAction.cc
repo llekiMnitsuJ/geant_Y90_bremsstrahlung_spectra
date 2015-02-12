@@ -35,7 +35,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4Box.hh"
 #include "G4Event.hh"
-#include "G4ParticleParticleSource.hh"
+#include "G4GeneralParticleSource.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
@@ -63,8 +63,9 @@ B4PrimaryGeneratorAction::B4PrimaryGeneratorAction()
   //
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
-  G4ParticleDefinition* particleDefinition = particleTable->FindParticle(particleName="e-");
-  fGenParticleSrc->SetParticleDefinition(particle);
+//  G4ParticleDefinition* particleDefinition = particleTable->FindParticle(particleName="e-");
+  G4ParticleDefinition* particleDefinition = particleTable->FindParticle(particleName="gamma");
+  fGenParticleSrc->SetParticleDefinition(particleDefinition);
 
   //set initial energy distribution
   this->setEnergyToY90betaICRP();
@@ -95,7 +96,9 @@ void B4PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   // This function is called at the begining of event
 
+//  fGenParticleSrc->SetVerbosity(2);
   fGenParticleSrc->GeneratePrimaryVertex(anEvent);
+//  fGenParticleSrc->SetVerbosity(0);
 }
 
 G4SPSEneDistribution* B4PrimaryGeneratorAction::setEnergyToY90betaICRP() {
