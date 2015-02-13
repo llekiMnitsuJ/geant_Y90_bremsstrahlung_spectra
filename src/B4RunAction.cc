@@ -39,8 +39,16 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4RunAction::B4RunAction()
- : G4UserRunAction()
+ : G4UserRunAction(),
+   foutFilename("Y90_beta_spectra_photons")
 { 
+}
+
+B4RunAction::B4RunAction(G4String &suffix)
+: G4UserRunAction(),
+  foutFilename("Y90_beta_spectra_photons")
+{
+	foutFilename += "_"+suffix;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,13 +82,12 @@ void B4RunAction::BeginOfRunAction(const G4Run* run)
   
   // Open an output file
   //
-  G4String fileName = "Y90_beta_spectra_photons";
-  analysisManager->OpenFile(fileName);
+  analysisManager->OpenFile(foutFilename);
   analysisManager->SetFirstHistoId(1);
 
   // Creating histograms
   //
-  analysisManager->CreateH1("photonSpectra","photon spectra at sphere surface", 231, 0., 2.3*MeV);
+  analysisManager->CreateH1("photonSpectra","photon spectra in sphere", 231, 0., 2.3*MeV);
   //analysisManager->CreateH1("2","Edep in gap", 100, 0., 100*MeV);
   //analysisManager->CreateH1("3","trackL in absorber", 100, 0., 1*m);
   //analysisManager->CreateH1("4","trackL in gap", 100, 0., 50*cm);

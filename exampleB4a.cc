@@ -54,7 +54,7 @@
 namespace {
   void PrintUsage() {
     G4cerr << " Usage: " << G4endl;
-    G4cerr << " exampleB4a [-m macro ] [-u UIsession]" << G4endl;
+    G4cerr << " exampleB4a [-m macro ] [-u UIsession] [-r cpuNum] [-s1 seed1] [-s2 seed2]" << G4endl;
   }
 }
 
@@ -64,16 +64,32 @@ int main(int argc,char** argv)
 {
   // Evaluate arguments
   //
-  if ( argc > 5 ) {
+  if ( argc > 11 ) {
     PrintUsage();
     return 1;
   }
   
   G4String macro;
   G4String session;
+  G4String cpuNumStr;
+  G4String tempStr;
+  G4long seed1;
+  G4long seed2;
+
   for ( G4int i=1; i<argc; i=i+2 ) {
     if      ( G4String(argv[i]) == "-m" ) macro = argv[i+1];
     else if ( G4String(argv[i]) == "-u" ) session = argv[i+1];
+    else if ( G4String(argv[i]) == "-r" ) cpuNumStr  = argv[i+1];
+    else if ( G4String(argv[i]) == "-s1" ){
+    	tempStr  = argv[i+1];
+    	std::stringstream ss(tempStr);
+    	ss >> seed1;
+    }
+    else if ( G4String(argv[i]) == "-s2" ){
+		tempStr  = argv[i+1];
+		std::stringstream ss(tempStr);
+		ss >> seed2;
+	}
     else {
       PrintUsage();
       return 1;
@@ -83,7 +99,8 @@ int main(int argc,char** argv)
   // Choose the Random engine
   //
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  
+  CLHEP::HepRandom::setTheSeed(seed1, seed2);
+
   // Construct the default run manager
   //
   G4RunManager * runManager = new G4RunManager;
@@ -109,7 +126,7 @@ int main(int argc,char** argv)
   //
   runManager->SetUserAction(new B4PrimaryGeneratorAction);
   //
-  runManager->SetUserAction(new B4RunAction());
+  runManager->SetUserAction(new B4RunAction(cpuNumStr));
   //
   B4aEventAction* eventAction = new B4aEventAction();
   runManager->SetUserAction(eventAction);

@@ -52,6 +52,7 @@ set(EXAMPLEB4A_SCRIPTS
   run1.mac
   run2.mac
   vis.mac
+  Y90_ICRP_beta_spectra.txt
   )
 
 foreach(_script ${EXAMPLEB4A_SCRIPTS})

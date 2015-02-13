@@ -45,7 +45,7 @@
 B4aEventAction::B4aEventAction()
  : G4UserEventAction(),
    fMessenger(0),
-   fPrintModulo(1)
+   fPrintModulo(100000)
 {
   // Define /B4/event commands using generic messenger class
   fMessenger = new G4GenericMessenger(this, "/B4/event/", "Event control");
@@ -72,10 +72,10 @@ void B4aEventAction::BeginOfEventAction(const G4Event* evt)
 
   G4int eventID = evt->GetEventID();
 
-//  if ( eventID % fPrintModulo == 0 )  {
+  if ( eventID % fPrintModulo == 0 )  {
     G4cout << "\n---> Begin of event: " << eventID << G4endl;
-//    //CLHEP::HepRandom::showEngineStatus();
-//  }
+//    CLHEP::HepRandom::showEngineStatus();
+  }
 
   // initialisation per event
   fEnergyVec.clear();
@@ -94,7 +94,11 @@ void B4aEventAction::EndOfEventAction(const G4Event* evt)
 
   // fill histograms
   for (G4int i = 0; i < fEnergyVec.size(); ++i) {
-	  analysisManager->FillH1(1, fEnergyVec[i]);
+	  G4bool filledTF = analysisManager->FillH1(1, fEnergyVec[i]);
+	  if (!filledTF){
+		  G4cerr << "unable to fill histogram!" << G4endl;
+		  exit(1);
+	  }
   }
 
   
@@ -110,14 +114,14 @@ void B4aEventAction::EndOfEventAction(const G4Event* evt)
   // Print per event (modulo n)
   //
   G4int eventID = evt->GetEventID();
-//  if ( eventID % fPrintModulo == 0) {
+  if ( eventID % fPrintModulo == 0) {
     G4cout << "---> End of event: " << eventID << G4endl;
 //
 //    G4cout
 //       << "   Total number of photons logged at sphere surface: " << std::setw(7)
 //                                        << fEnergyVec.size()
 //       << G4endl;
-//  }
+  }
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

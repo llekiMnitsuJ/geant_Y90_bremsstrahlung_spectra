@@ -35,6 +35,7 @@
 #include "G4Step.hh"
 #include "G4Track.hh"
 #include "G4VProcess.hh"
+#include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4RunManager.hh"
 
@@ -59,15 +60,26 @@ B4aSteppingAction::~B4aSteppingAction()
 
 void B4aSteppingAction::UserSteppingAction(const G4Step* step)
 {
-// Collect photon energy that crosses from sphere into world
-
+// Anytime a photon is generated.
+//Just write its kinetic energy to histogram and then kill it.
   
   // get pointer to prestep & poststep
   G4StepPoint* prePoint = step->GetPreStepPoint();
   G4StepPoint* postPoint = step->GetPostStepPoint();
 
+  //now check that it is a photon and store the initial kinetic energy from prepoint
+  G4Track* myTrack = step->GetTrack();
+  const G4ParticleDefinition* myParticleDef = myTrack->GetParticleDefinition();
+  const G4String particleName = myParticleDef->GetParticleName();
+  if (particleName == "gamma"){
+	  G4double photonEnergy = prePoint->GetKineticEnergy();
+	  fEventAction->AddToEnergyVector(photonEnergy);
+	  myTrack->SetTrackStatus(fKillTrackAndSecondaries);
+  }
+
+  /*
 //  G4cout << "in user stepping action!" << G4endl;
-  //check if on surface of sphere...
+  //check if bremsstrahlung process, log gamma ...
   if ( (postPoint->GetStepStatus() == fGeomBoundary) &&
 	   (prePoint->GetPhysicalVolume()->GetName() == "sphere") &&
 	   (postPoint->GetPhysicalVolume()->GetName() == "World")){
@@ -75,6 +87,7 @@ void B4aSteppingAction::UserSteppingAction(const G4Step* step)
 
 	  //now check that it is a photon
 	  G4Track* myTrack = step->GetTrack();
+	  G4DynamicParticle* myTrack->GetDynamicParticle();
 	  const G4ParticleDefinition* myParticleDef = myTrack->GetParticleDefinition();
 	  const G4String particleName = myParticleDef->GetParticleName();
 //	  G4cout << "on surface of sphere with " << particleName << G4endl;
@@ -83,20 +96,20 @@ void B4aSteppingAction::UserSteppingAction(const G4Step* step)
 		  fEventAction->AddToEnergyVector(photonEnergy);
 	  }
 
-	  /*
-	  const G4VProcess* currentProcess=prePoint->GetProcessDefinedStep();
-	  if (currentProcess != 0) {
-		  const G4String & StepProcessName = currentProcess->GetProcessName();
-		  G4String volumePos = aTrack->GetNextVolume()->GetName();
-
-		  if(StepProcessName== "Transportation" && volumePos == thisVolume) {
-
-	  // processing hit when entering the volume
-
-	  G4double kineticEnergy = aStep->GetTrack()->GetKineticEnergy();
-      */
-
   }
+  */
+  /*
+  	  const G4VProcess* currentProcess=prePoint->GetProcessDefinedStep();
+  	  if (currentProcess != 0) {
+  		  const G4String & StepProcessName = currentProcess->GetProcessName();
+  		  G4String volumePos = aTrack->GetNextVolume()->GetName();
+
+  		  if(StepProcessName== "Transportation" && volumePos == thisVolume) {
+
+  	  // processing hit when entering the volume
+
+  	  G4double kineticEnergy = aStep->GetTrack()->GetKineticEnergy();
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

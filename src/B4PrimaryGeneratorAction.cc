@@ -63,8 +63,8 @@ B4PrimaryGeneratorAction::B4PrimaryGeneratorAction()
   //
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
-//  G4ParticleDefinition* particleDefinition = particleTable->FindParticle(particleName="e-");
-  G4ParticleDefinition* particleDefinition = particleTable->FindParticle(particleName="gamma");
+  G4ParticleDefinition* particleDefinition = particleTable->FindParticle(particleName="e-");
+//  G4ParticleDefinition* particleDefinition = particleTable->FindParticle(particleName="gamma");
   fGenParticleSrc->SetParticleDefinition(particleDefinition);
 
   //set initial energy distribution
@@ -105,6 +105,8 @@ G4SPSEneDistribution* B4PrimaryGeneratorAction::setEnergyToY90betaICRP() {
 
 	//set to Abr type, read point wise from file,
 	G4SPSEneDistribution* eneDist = fGenParticleSrc->GetCurrentSource()->GetEneDist();
+//	eneDist->SetEnergyDisType("Mono");
+//	eneDist->SetMonoEnergy(2*MeV);
 	eneDist->SetEnergyDisType("Arb");
 	eneDist->ArbEnergyHistoFile("Y90_ICRP_beta_spectra.txt");
 	eneDist->ArbInterpolate("Spline");

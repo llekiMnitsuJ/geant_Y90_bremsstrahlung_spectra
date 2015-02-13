@@ -110,7 +110,7 @@ void B4DetectorConstruction::DefineMaterials()
 G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
 {
   // Geometry parameters
-  G4double sphereRadius = 0.5*mm;
+  G4double sphereRadius = 15.0*mm;
   G4double world_xyz = 1.2*sphereRadius;
   
   G4NistManager* nist = G4NistManager::Instance();

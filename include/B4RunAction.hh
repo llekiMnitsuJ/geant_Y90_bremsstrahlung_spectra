@@ -58,10 +58,14 @@ class B4RunAction : public G4UserRunAction
 {
   public:
     B4RunAction();
+    B4RunAction(G4String &suffix); //use this to create different outputfilenames in parallel run?
     virtual ~B4RunAction();
 
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
+
+  private:
+    G4String foutFilename;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
